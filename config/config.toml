@@ -49,4 +49,5 @@ builtin = "manual"
 "~/.config/zed" = { mode = "track" }
 "~/.face" = { mode = "track" }
 "~/.gitconfig" = { mode = "track" }
+"~/.pi" = { mode = "track" }
 "~/Pictures/Wallpapers" = { mode = "track" }
