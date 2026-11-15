@@ -74,6 +74,18 @@
       "variants": []
     },
     {
+      "path": "home/.pi/agent/extensions",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.pi/agent/skills",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
       "path": "home/Pictures/Wallpapers",
       "autosave": true,
       "encrypt": false,
