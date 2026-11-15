@@ -1,0 +1,264 @@
+local wezterm = require("wezterm")
+local act = wezterm.action
+
+-- if you are *NOT* lazy-loading smart-splits.nvim (recommended)
+local function is_vim(pane)
+	-- this is set by the plugin, and unset on ExitPre in Neovim
+	return pane:get_user_vars().IS_NVIM == "true"
+end
+
+local function is_split_control_exempt(pane)
+	if is_vim(pane) then
+		return true
+	end
+
+	local process_name = string.gsub(pane:get_foreground_process_name(), "(.*[/\\])(.*)", "%2")
+	return process_name == "nvim" or process_name == "vim" or process_name == "vi-sql"
+end
+
+local direction_keys = {
+	h = "Left",
+	j = "Down",
+	k = "Up",
+	l = "Right",
+}
+
+local function split_nav(resize_or_move, key)
+	return {
+		key = key,
+		mods = resize_or_move == "resize" and "META" or "CTRL",
+		action = wezterm.action_callback(function(win, pane)
+			if is_split_control_exempt(pane) then
+				-- pass the keys through to vim/nvim
+				win:perform_action({
+					SendKey = { key = key, mods = resize_or_move == "resize" and "META" or "CTRL" },
+				}, pane)
+			else
+				if resize_or_move == "resize" then
+					win:perform_action({ AdjustPaneSize = { direction_keys[key], 3 } }, pane)
+				else
+					win:perform_action({ ActivatePaneDirection = direction_keys[key] }, pane)
+				end
+			end
+		end),
+	}
+end
+
+return {
+	leader = { key = "a", mods = "CTRL", timeout_milliseconds = 3000 },
+	keys = {
+		{
+			key = "Delete",
+			action = wezterm.action_callback(function(win, pane)
+				local proc = pane:get_foreground_process_name()
+				if proc ~= "nvim" then
+					win:perform_action(
+						act.SendKey({
+							key = "Delete",
+						}),
+						pane
+					)
+					return
+				end
+
+				local key_code = utf8.char(0x1b) .. "[3;1~"
+				win:perform_action(act.SendString(key_code), pane)
+			end),
+		},
+		-- mode activations ---
+		{
+			key = "a",
+			mods = "LEADER",
+			action = act.ActivateKeyTable({
+				name = "normal_mode",
+				one_shot = false,
+				replace_current = true,
+				prevent_fallback = true,
+			}),
+		},
+		{ key = "d", mods = "LEADER", action = act.ActivateCopyMode },
+		{ key = "s", mods = "LEADER", action = act.Search("CurrentSelectionOrEmptyString") },
+		-- tmux-like bindings
+		{ key = '"', mods = "LEADER|SHIFT", action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
+		{ key = "%", mods = "LEADER|SHIFT", action = act.SplitVertical({ domain = "CurrentPaneDomain" }) },
+		{ key = "c", mods = "LEADER", action = act.SpawnTab("DefaultDomain") },
+		{ key = "b", mods = "LEADER", action = act.SpawnTab({ DomainName = "devbox" }) },
+		{ key = "x", mods = "LEADER", action = act.CloseCurrentTab({ confirm = false }) },
+
+		{ key = "0", mods = "LEADER", action = act.ActivateTab(0) },
+		{ key = "1", mods = "LEADER", action = act.ActivateTab(1) },
+		{ key = "2", mods = "LEADER", action = act.ActivateTab(2) },
+		{ key = "3", mods = "LEADER", action = act.ActivateTab(3) },
+		{ key = "4", mods = "LEADER", action = act.ActivateTab(4) },
+		{ key = "5", mods = "LEADER", action = act.ActivateTab(5) },
+		{ key = "6", mods = "LEADER", action = act.ActivateTab(6) },
+		{ key = "7", mods = "LEADER", action = act.ActivateTab(7) },
+		{ key = "8", mods = "LEADER", action = act.ActivateTab(8) },
+		{ key = "9", mods = "LEADER", action = act.ActivateTab(9) },
+
+		{ key = "p", mods = "LEADER", action = act.ActivateTabRelative(-1) },
+		{ key = "n", mods = "LEADER", action = act.ActivateTabRelative(1) },
+
+		{ key = "f", mods = "LEADER", action = act.ToggleFullScreen },
+
+		-- defaults (unbind SUPER variants as SUPER is reserved for window tiling
+		{ key = "Tab", mods = "CTRL", action = act.ActivateLastTab },
+		{ key = "+", mods = "CTRL", action = act.IncreaseFontSize },
+		{ key = "+", mods = "SHIFT|CTRL", action = act.IncreaseFontSize },
+		{ key = "-", mods = "CTRL", action = act.DecreaseFontSize },
+		{ key = "-", mods = "SHIFT|CTRL", action = act.DecreaseFontSize },
+		{ key = "0", mods = "CTRL", action = act.ResetFontSize },
+		{ key = "0", mods = "SHIFT|CTRL", action = act.ResetFontSize },
+		{ key = "=", mods = "CTRL", action = act.IncreaseFontSize },
+		{ key = "=", mods = "SHIFT|CTRL", action = act.IncreaseFontSize },
+		{ key = "C", mods = "SHIFT|CTRL", action = act.CopyTo("Clipboard") },
+		{ key = "V", mods = "SHIFT|CTRL", action = act.PasteFrom("Clipboard") },
+		{ key = "X", mods = "CTRL", action = act.ActivateCopyMode },
+		{ key = "X", mods = "SHIFT|CTRL", action = act.ActivateCopyMode },
+		{ key = "Z", mods = "CTRL", action = act.TogglePaneZoomState },
+		{ key = "Z", mods = "SHIFT|CTRL", action = act.TogglePaneZoomState },
+		{ key = "c", mods = "SHIFT|CTRL", action = act.CopyTo("Clipboard") },
+		{ key = "v", mods = "SHIFT|CTRL", action = act.PasteFrom("Clipboard") },
+		{ key = "w", mods = "SHIFT|CTRL", action = act.CloseCurrentTab({ confirm = true }) },
+		{ key = "x", mods = "SHIFT|CTRL", action = act.ActivateCopyMode },
+		{ key = "z", mods = "SHIFT|CTRL", action = act.TogglePaneZoomState },
+		{ key = "Copy", mods = "NONE", action = act.CopyTo("Clipboard") },
+		{ key = "Paste", mods = "NONE", action = act.PasteFrom("Clipboard") },
+
+		-- my extras
+		{ key = ".", mods = "CTRL", action = act.ActivateTabRelative(1) },
+		{ key = ",", mods = "CTRL", action = act.ActivateTabRelative(-1) },
+		{ key = ">", mods = "CTRL|SHIFT", action = act.MoveTabRelative(1) },
+		{ key = "<", mods = "CTRL|SHIFT", action = act.MoveTabRelative(-1) },
+
+		-- move between split panes
+		split_nav("move", "h"),
+		split_nav("move", "j"),
+		split_nav("move", "k"),
+		split_nav("move", "l"),
+		-- resize panes
+		split_nav("resize", "h"),
+		split_nav("resize", "j"),
+		split_nav("resize", "k"),
+		split_nav("resize", "l"),
+	},
+
+	key_tables = {
+		normal_mode = {
+			{ key = "Escape", mods = "NONE", action = act.PopKeyTable },
+			{ key = "h", mods = "NONE", action = act.ActivatePaneDirection("Left") },
+			{ key = "j", mods = "NONE", action = act.ActivatePaneDirection("Down") },
+			{ key = "k", mods = "NONE", action = act.ActivatePaneDirection("Up") },
+			{ key = "l", mods = "NONE", action = act.ActivatePaneDirection("Right") },
+			{ key = "h", mods = "ALT", action = act.AdjustPaneSize({ "Left", 3 }) },
+			{ key = "j", mods = "ALT", action = act.AdjustPaneSize({ "Down", 3 }) },
+			{ key = "k", mods = "ALT", action = act.AdjustPaneSize({ "Up", 3 }) },
+			{ key = "l", mods = "ALT", action = act.AdjustPaneSize({ "Right", 3 }) },
+
+			{ key = '"', mods = "SHIFT", action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
+			{ key = "%", mods = "SHIFT", action = act.SplitVertical({ domain = "CurrentPaneDomain" }) },
+			{ key = "c", mods = "NONE", action = act.SpawnTab("DefaultDomain") },
+			{ key = "b", mods = "NONE", action = act.SpawnTab({ DomainName = "devbox" }) },
+			{ key = "x", mods = "NONE", action = act.CloseCurrentTab({ confirm = false }) },
+			{ key = "0", mods = "NONE", action = act.ActivateTab(0) },
+			{ key = "1", mods = "NONE", action = act.ActivateTab(1) },
+			{ key = "2", mods = "NONE", action = act.ActivateTab(2) },
+			{ key = "3", mods = "NONE", action = act.ActivateTab(3) },
+			{ key = "4", mods = "NONE", action = act.ActivateTab(4) },
+			{ key = "5", mods = "NONE", action = act.ActivateTab(5) },
+			{ key = "6", mods = "NONE", action = act.ActivateTab(6) },
+			{ key = "7", mods = "NONE", action = act.ActivateTab(7) },
+			{ key = "8", mods = "NONE", action = act.ActivateTab(8) },
+			{ key = "9", mods = "NONE", action = act.ActivateTab(9) },
+			{ key = "p", mods = "NONE", action = act.ActivateTabRelative(-1) },
+			{ key = "n", mods = "NONE", action = act.ActivateTabRelative(1) },
+			{ key = "n", mods = "SHIFT", action = act.MoveTabRelative(1) },
+			{ key = "p", mods = "SHIFT", action = act.MoveTabRelative(-1) },
+			{ key = ",", mods = "NONE", action = act.ActivateTabRelative(-1) },
+			{ key = ".", mods = "NONE", action = act.ActivateTabRelative(1) },
+			{ key = ">", mods = "SHIFT", action = act.MoveTabRelative(1) },
+			{ key = "<", mods = "SHIFT", action = act.MoveTabRelative(-1) },
+		},
+		copy_mode = {
+			{ key = "Tab", mods = "NONE", action = act.CopyMode("MoveForwardWord") },
+			{ key = "Tab", mods = "SHIFT", action = act.CopyMode("MoveBackwardWord") },
+			{ key = "Enter", mods = "NONE", action = act.CopyMode("MoveToStartOfNextLine") },
+			{ key = "Escape", mods = "NONE", action = act.CopyMode("Close") },
+			{ key = "Space", mods = "NONE", action = act.CopyMode({ SetSelectionMode = "Cell" }) },
+			{ key = "$", mods = "NONE", action = act.CopyMode("MoveToEndOfLineContent") },
+			{ key = "$", mods = "SHIFT", action = act.CopyMode("MoveToEndOfLineContent") },
+			{ key = ",", mods = "NONE", action = act.CopyMode("JumpReverse") },
+			{ key = "0", mods = "NONE", action = act.CopyMode("MoveToStartOfLine") },
+			{ key = ";", mods = "NONE", action = act.CopyMode("JumpAgain") },
+			{ key = "F", mods = "NONE", action = act.CopyMode({ JumpBackward = { prev_char = false } }) },
+			{ key = "F", mods = "SHIFT", action = act.CopyMode({ JumpBackward = { prev_char = false } }) },
+			{ key = "G", mods = "NONE", action = act.CopyMode("MoveToScrollbackBottom") },
+			{ key = "G", mods = "SHIFT", action = act.CopyMode("MoveToScrollbackBottom") },
+			{ key = "H", mods = "NONE", action = act.CopyMode("MoveToViewportTop") },
+			{ key = "H", mods = "SHIFT", action = act.CopyMode("MoveToViewportTop") },
+			{ key = "L", mods = "NONE", action = act.CopyMode("MoveToViewportBottom") },
+			{ key = "L", mods = "SHIFT", action = act.CopyMode("MoveToViewportBottom") },
+			{ key = "M", mods = "NONE", action = act.CopyMode("MoveToViewportMiddle") },
+			{ key = "M", mods = "SHIFT", action = act.CopyMode("MoveToViewportMiddle") },
+			{ key = "O", mods = "NONE", action = act.CopyMode("MoveToSelectionOtherEndHoriz") },
+			{ key = "O", mods = "SHIFT", action = act.CopyMode("MoveToSelectionOtherEndHoriz") },
+			{ key = "T", mods = "NONE", action = act.CopyMode({ JumpBackward = { prev_char = true } }) },
+			{ key = "T", mods = "SHIFT", action = act.CopyMode({ JumpBackward = { prev_char = true } }) },
+			{ key = "V", mods = "NONE", action = act.CopyMode({ SetSelectionMode = "Line" }) },
+			{ key = "V", mods = "SHIFT", action = act.CopyMode({ SetSelectionMode = "Line" }) },
+			{ key = "^", mods = "NONE", action = act.CopyMode("MoveToStartOfLineContent") },
+			{ key = "^", mods = "SHIFT", action = act.CopyMode("MoveToStartOfLineContent") },
+			{ key = "b", mods = "NONE", action = act.CopyMode("MoveBackwardWord") },
+			{ key = "b", mods = "ALT", action = act.CopyMode("MoveBackwardWord") },
+			{ key = "b", mods = "CTRL", action = act.CopyMode("PageUp") },
+			{ key = "c", mods = "CTRL", action = act.CopyMode("Close") },
+			{ key = "d", mods = "CTRL", action = act.CopyMode({ MoveByPage = 0.5 }) },
+			{ key = "e", mods = "NONE", action = act.CopyMode("MoveForwardWordEnd") },
+			{ key = "f", mods = "NONE", action = act.CopyMode({ JumpForward = { prev_char = false } }) },
+			{ key = "f", mods = "ALT", action = act.CopyMode("MoveForwardWord") },
+			{ key = "f", mods = "CTRL", action = act.CopyMode("PageDown") },
+			{ key = "g", mods = "NONE", action = act.CopyMode("MoveToScrollbackTop") },
+			{ key = "g", mods = "CTRL", action = act.CopyMode("Close") },
+			{ key = "h", mods = "NONE", action = act.CopyMode("MoveLeft") },
+			{ key = "j", mods = "NONE", action = act.CopyMode("MoveDown") },
+			{ key = "k", mods = "NONE", action = act.CopyMode("MoveUp") },
+			{ key = "l", mods = "NONE", action = act.CopyMode("MoveRight") },
+			{ key = "m", mods = "ALT", action = act.CopyMode("MoveToStartOfLineContent") },
+			{ key = "o", mods = "NONE", action = act.CopyMode("MoveToSelectionOtherEnd") },
+			{ key = "q", mods = "NONE", action = act.CopyMode("Close") },
+			{ key = "t", mods = "NONE", action = act.CopyMode({ JumpForward = { prev_char = true } }) },
+			{ key = "u", mods = "CTRL", action = act.CopyMode({ MoveByPage = -0.5 }) },
+			{ key = "v", mods = "NONE", action = act.CopyMode({ SetSelectionMode = "Cell" }) },
+			{ key = "v", mods = "CTRL", action = act.CopyMode({ SetSelectionMode = "Block" }) },
+			{ key = "w", mods = "NONE", action = act.CopyMode("MoveForwardWord") },
+			{
+				key = "y",
+				mods = "NONE",
+				action = act.Multiple({ { CopyTo = "ClipboardAndPrimarySelection" }, { CopyMode = "Close" } }),
+			},
+			{ key = "PageUp", mods = "NONE", action = act.CopyMode("PageUp") },
+			{ key = "PageDown", mods = "NONE", action = act.CopyMode("PageDown") },
+			{ key = "End", mods = "NONE", action = act.CopyMode("MoveToEndOfLineContent") },
+			{ key = "Home", mods = "NONE", action = act.CopyMode("MoveToStartOfLine") },
+			{ key = "LeftArrow", mods = "NONE", action = act.CopyMode("MoveLeft") },
+			{ key = "LeftArrow", mods = "ALT", action = act.CopyMode("MoveBackwardWord") },
+			{ key = "RightArrow", mods = "NONE", action = act.CopyMode("MoveRight") },
+			{ key = "RightArrow", mods = "ALT", action = act.CopyMode("MoveForwardWord") },
+			{ key = "UpArrow", mods = "NONE", action = act.CopyMode("MoveUp") },
+			{ key = "DownArrow", mods = "NONE", action = act.CopyMode("MoveDown") },
+		},
+
+		search_mode = {
+			{ key = "Enter", mods = "NONE", action = act.CopyMode("PriorMatch") },
+			{ key = "Escape", mods = "NONE", action = act.CopyMode("Close") },
+			{ key = "n", mods = "CTRL", action = act.CopyMode("NextMatch") },
+			{ key = "p", mods = "CTRL", action = act.CopyMode("PriorMatch") },
+			{ key = "r", mods = "CTRL", action = act.CopyMode("CycleMatchType") },
+			{ key = "u", mods = "CTRL", action = act.CopyMode("ClearPattern") },
+			{ key = "PageUp", mods = "NONE", action = act.CopyMode("PriorMatchPage") },
+			{ key = "PageDown", mods = "NONE", action = act.CopyMode("NextMatchPage") },
+			{ key = "UpArrow", mods = "NONE", action = act.CopyMode("PriorMatch") },
+			{ key = "DownArrow", mods = "NONE", action = act.CopyMode("NextMatch") },
+		},
+	},
+}
