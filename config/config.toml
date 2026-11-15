@@ -34,7 +34,7 @@ idiomatic_version_file_enable_tools = ["python", "rust"]
 python.uv_venv_auto = "create|source"
 
 [bootstrap.services.mise-history]
-builtin = "history-watch"
+builtin = "manual"
 
 [dotfiles]
 "~/.config/fuzzel" = { mode = "track" }
