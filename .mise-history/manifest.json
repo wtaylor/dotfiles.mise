@@ -8,6 +8,12 @@
       "variants": []
     },
     {
+      "path": "home/.config/fish/config.fish",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
       "path": "home/.config/fuzzel",
       "autosave": true,
       "encrypt": false,
@@ -97,6 +103,7 @@
   "permissions": {
     "config/mise.lock": 384,
     "home/.config": 448,
+    "home/.config/fish": 448,
     "home/.config/k9s": 448,
     "home/.config/k9s/aliases.yaml": 384,
     "home/.config/k9s/config.yaml": 384,

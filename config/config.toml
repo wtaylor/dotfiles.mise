@@ -39,6 +39,7 @@ python.uv_venv_auto = "create|source"
 builtin = "manual"
 
 [dotfiles]
+"~/.config/fish/config.fish" = { mode = "track" }
 "~/.config/fuzzel" = { mode = "track" }
 "~/.config/harlequin" = { mode = "track" }
 "~/.config/k9s" = { mode = "track" }
