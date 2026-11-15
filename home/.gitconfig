@@ -1,0 +1,25 @@
+[user]
+	name = William Taylor
+  email = me@willtaylor.info
+
+[includeIf "gitdir:~/code/work/"]
+	path = ~/code/work/.gitconfig
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+  required = true
+
+[pager]
+  external = true
+
+[diff]
+  external = difft
+
+[alias]
+  dlog = log --ext-diff
+  dshow = show --ext-diff
+
+[core]
+  editor = nvim
