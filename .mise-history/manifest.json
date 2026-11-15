@@ -1,0 +1,23 @@
+{
+  "format": 1,
+  "enrollment": [
+    {
+      "path": "config",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
+      "path": "home/.config/nvim",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    }
+  ],
+  "exclude": [],
+  "recipients": [],
+  "permissions": {
+    "config/mise.lock": 384,
+    "home/.config": 448
+  }
+}

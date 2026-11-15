@@ -1,0 +1,6 @@
+#:schema "https://mise.jdx.dev/schema/mise.json"
+
+[tools]
+claude = "2.1.325"
+oh-my-pi = { version = "18.20.0", rename_exe = "omp" }
+pi = "1.5.2"
