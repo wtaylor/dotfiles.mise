@@ -2,6 +2,7 @@
 
 [env]
 EDITOR = "nvim"
+_.path = ["~/.local/bin"]
 
 [tools]
 cargo-binstall = "1.27.0"
