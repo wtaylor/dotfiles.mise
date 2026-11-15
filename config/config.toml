@@ -1,6 +1,7 @@
 #:schema "https://mise.jdx.dev/schema/mise.json"
 
 [env]
+EDITOR = "nvim"
 
 [tools]
 cargo-binstall = "1.27.0"
