@@ -42,4 +42,5 @@ builtin = "history-watch"
 "~/.config/k9s" = { mode = "track" }
 "~/.config/mise" = { mode = "track" }
 "~/.config/niri" = { mode = "track" }
+"~/.config/noctalia" = { mode = "track" }
 "~/.config/nvim" = { mode = "track" }
