@@ -6,4 +6,4 @@ oh-my-pi = { version = "18.20.0", rename_exe = "omp" }
 pi = "1.5.2"
 
 [dotfiles]
-"~/.pi" = { mode = "track" }
+"~/.pi/agent/extensions" = { mode = "track" }
