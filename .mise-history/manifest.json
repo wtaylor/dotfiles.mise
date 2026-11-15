@@ -107,6 +107,7 @@
   "exclude": [],
   "recipients": [],
   "permissions": {
+    "config/mise.lock": 384,
     "home/.config": 448,
     "home/.config/fish": 448,
     "home/.config/k9s": 448,
@@ -117,7 +118,6 @@
     "home/.config/zed/.tmpY3gub6": 384,
     "home/.config/zed/.tmpmARN5D": 384,
     "home/.config/zed/.tmpmyUmXX": 384,
-    "home/.config/zed/settings.json": 384,
-    "home/.gitconfig": 384
+    "home/.config/zed/settings.json": 384
   }
 }

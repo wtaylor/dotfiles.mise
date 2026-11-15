@@ -3,10 +3,7 @@
   email = me@willtaylor.info
 
 [includeIf "gitdir:~/code/work/"]
-  path = ~/code/work/.gitconfig
-
-[includeIf "gitdir:~/code/personal/"]
-	path = ~/code/personal/.gitconfig
+	path = ~/code/work/.gitconfig
 
 [filter "lfs"]
 	clean = git-lfs clean -- %f
@@ -26,15 +23,3 @@
 
 [core]
   editor = nvim
-[hook "hk-commit-msg"]
-	command = test \"${HK:-1}\" = \"0\" || ~/.local/share/mise/installs/hk/1.54.0/hk run commit-msg --from-hook
-	event = commit-msg
-[hook "hk-pre-commit"]
-	command = test \"${HK:-1}\" = \"0\" || ~/.local/share/mise/installs/hk/1.54.0/hk run pre-commit --from-hook --staged
-	event = pre-commit
-[hook "hk-pre-push"]
-	command = test \"${HK:-1}\" = \"0\" || ~/.local/share/mise/installs/hk/1.54.0/hk run pre-push --from-hook
-	event = pre-push
-[hook "hk-prepare-commit-msg"]
-	command = test \"${HK:-1}\" = \"0\" || ~/.local/share/mise/installs/hk/1.54.0/hk run prepare-commit-msg --from-hook
-	event = prepare-commit-msg
