@@ -47,3 +47,4 @@ builtin = "history-watch"
 "~/.config/starship.toml" = { mode = "track" }
 "~/.config/wezterm" = { mode = "track" }
 "~/.config/zed" = { mode = "track" }
+"~/.face" = { mode = "track" }
