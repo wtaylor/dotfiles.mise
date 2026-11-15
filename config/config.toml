@@ -48,3 +48,4 @@ builtin = "history-watch"
 "~/.config/wezterm" = { mode = "track" }
 "~/.config/zed" = { mode = "track" }
 "~/.face" = { mode = "track" }
+"~/Pictures/Wallpapers" = { mode = "track" }
