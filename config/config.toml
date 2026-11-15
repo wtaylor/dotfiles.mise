@@ -37,5 +37,6 @@ python.uv_venv_auto = "create|source"
 builtin = "history-watch"
 
 [dotfiles]
+"~/.config/fuzzel" = { mode = "track" }
 "~/.config/mise" = { mode = "track" }
 "~/.config/nvim" = { mode = "track" }
