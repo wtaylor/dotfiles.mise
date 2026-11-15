@@ -14,6 +14,12 @@
       "variants": []
     },
     {
+      "path": "home/.config/fish/fish_plugins",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
+    },
+    {
       "path": "home/.config/fuzzel",
       "autosave": true,
       "encrypt": false,
