@@ -74,12 +74,6 @@
       "variants": []
     },
     {
-      "path": "home/.pi",
-      "autosave": true,
-      "encrypt": false,
-      "variants": []
-    },
-    {
       "path": "home/Pictures/Wallpapers",
       "autosave": true,
       "encrypt": false,
