@@ -44,3 +44,4 @@ builtin = "history-watch"
 "~/.config/niri" = { mode = "track" }
 "~/.config/noctalia" = { mode = "track" }
 "~/.config/nvim" = { mode = "track" }
+"~/.config/starship.toml" = { mode = "track" }
