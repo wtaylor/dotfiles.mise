@@ -48,6 +48,12 @@
       "autosave": true,
       "encrypt": false,
       "variants": []
+    },
+    {
+      "path": "home/.config/zed",
+      "autosave": true,
+      "encrypt": false,
+      "variants": []
     }
   ],
   "exclude": [],
@@ -57,6 +63,7 @@
     "home/.config": 448,
     "home/.config/k9s": 448,
     "home/.config/k9s/aliases.yaml": 384,
-    "home/.config/k9s/config.yaml": 384
+    "home/.config/k9s/config.yaml": 384,
+    "home/.config/zed/settings.json": 384
   }
 }

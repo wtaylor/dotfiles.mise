@@ -45,3 +45,4 @@ builtin = "history-watch"
 "~/.config/noctalia" = { mode = "track" }
 "~/.config/nvim" = { mode = "track" }
 "~/.config/starship.toml" = { mode = "track" }
+"~/.config/zed" = { mode = "track" }
