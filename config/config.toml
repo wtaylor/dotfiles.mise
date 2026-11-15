@@ -41,4 +41,5 @@ builtin = "history-watch"
 "~/.config/harlequin" = { mode = "track" }
 "~/.config/k9s" = { mode = "track" }
 "~/.config/mise" = { mode = "track" }
+"~/.config/niri" = { mode = "track" }
 "~/.config/nvim" = { mode = "track" }
