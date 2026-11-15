@@ -7,4 +7,3 @@ pi = "1.5.2"
 
 [dotfiles]
 "~/.pi" = { mode = "track" }
-"~/.omp" = { mode = "track" }
