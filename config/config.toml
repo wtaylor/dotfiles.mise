@@ -20,6 +20,15 @@ lockfile = true
 idiomatic_version_file_enable_tools = ["python", "rust"]
 python.uv_venv_auto = "create|source"
 
+[bootstrap.packages]
+fish = { names = { brew = "fish", apt = "fish" } }
+
+[bootstrap.hooks.final]
+shell = "fish -c"
+run = """
+curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher
+"""
+
 [tools]
 cargo-binstall = "1.27.0"
 crane = "0.22.1"
@@ -60,3 +69,4 @@ uv = "0.12.0"
 "~/.face" = { mode = "track" }
 "~/.gitconfig" = { mode = "track" }
 "~/Pictures/Wallpapers" = { mode = "track" }
+"~/code/work/.gitconfig" = { mode = "track" }
