@@ -22,6 +22,12 @@ python.uv_venv_auto = "create|source"
 
 [bootstrap.packages]
 fish = { names = { brew = "fish", apt = "fish" } }
+"brew-cask:1password" = { os = ["macos"] }
+"brew-cask:firefox" = { os = ["macos"] }
+"brew-cask:wezterm@nightly" = { os = ["macos"] }
+"brew-cask:zed" = { os = ["macos"] }
+"brew-cask:podman-desktop" = { os = ["macos"] }
+"brew:starship" = { os = ["macos"] }
 
 [tools]
 cargo-binstall = "1.27.0"

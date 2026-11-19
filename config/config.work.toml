@@ -1,10 +1,5 @@
 [bootstrap.packages]
 "brew-cask:tailscale-app" = { os = ["macos"] }
-"brew-cask:1password" = { os = ["macos"] }
-"brew-cask:firefox" = { os = ["macos"] }
-"brew-cask:wezterm@nightly" = { os = ["macos"] }
-"brew-cask:zed" = { os = ["macos"] }
-"brew-cask:podman-desktop" = { os = ["macos"] }
 
 [tools]
 aws-cli = "2.41.0"
