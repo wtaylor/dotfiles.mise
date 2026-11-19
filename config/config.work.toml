@@ -1,0 +1,6 @@
+[bootstrap.packages]
+"brew-cask:tailscale-app" = { os = ["macos"] }
+"brew-cask:1password" = { os = ["macos"] }
+"brew-cask:firefox" = { os = ["macos"] }
+"brew-cask:wezterm@nightly" = { os = ["macos"] }
+"brew:fish" = { os = ["macos"] }

@@ -1,2 +1,5 @@
-# copy and uncomment the following to mise.local.toml to active ai sandbox tools
+# copy and uncomment the following to miserc.local.toml to active ai sandbox tools
 # env = ["ai"]
+#
+# copy and uncomment the following to miserc.local.toml to active work profile
+# env = ["work"]
